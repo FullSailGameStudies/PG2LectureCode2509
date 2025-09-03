@@ -21,6 +21,12 @@ void print(const std::vector<std::string>& names)
 
 int main()
 {
+    //escape sequences
+    // \t tab
+    // \n newline
+
+    std::cout << "Hello Gotham";//Console::Write("Hello Gotham");
+    std::cout << "Hello Gotham\n";//Console::WriteLine("Hello Gotham");
     //Input and Console examples   
     // 
     //std::string myName = Input::GetString("What is your name?");
@@ -33,6 +39,18 @@ int main()
     Console::SetCursorLeft(15);
     Console::WriteLine("Hello PG2!", ConsoleColor::Yellow, ConsoleColor::Red);
     Input::PressEnter("Press enter to continue...", true);
+
+    srand(time(NULL));
+    for (int i = 0; i < 100000; i++)
+    {
+        //  % will divide by the number and give the remainder
+        //  result will be 0-(num-1)
+        int width = Console::GetWindowWidth();//capturing the returned data
+        int x = rand() % width;
+        int y = rand() % Console::GetWindowHeight();
+        Console::SetCursorPosition(x,y);
+        Console::Write("Batman", (ConsoleColor)( rand() % 8));
+    }
 
     /*
       Calling a method
