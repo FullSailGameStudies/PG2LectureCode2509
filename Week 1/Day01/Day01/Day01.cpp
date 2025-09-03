@@ -40,17 +40,23 @@ int main()
     Console::WriteLine("Hello PG2!", ConsoleColor::Yellow, ConsoleColor::Red);
     Input::PressEnter("Press enter to continue...", true);
 
-    srand(time(NULL));
-    for (int i = 0; i < 100000; i++)
-    {
-        //  % will divide by the number and give the remainder
-        //  result will be 0-(num-1)
-        int width = Console::GetWindowWidth();//capturing the returned data
-        int x = rand() % width;
-        int y = rand() % Console::GetWindowHeight();
-        Console::SetCursorPosition(x,y);
-        Console::Write("Batman", (ConsoleColor)( rand() % 8));
-    }
+    //srand(time(NULL));
+    //for (int i = 0; i < 100; i++)
+    //{
+    //    //  % will divide by the number and give the remainder
+    //    //  result will be 0-(num-1)
+    //    int width = Console::GetWindowWidth();//capturing the returned data
+    //    int x = rand() % width;
+    //    int y = rand() % Console::GetWindowHeight();
+    //    Console::SetCursorPosition(x,y);
+    //    Console::Write("Batman", (ConsoleColor)( rand() % 8));
+    //}
+
+    std::string bestSuper = Input::GetString("Best superhero? ");
+    std::cout << "Best? " << bestSuper << "\n";
+
+    int age = Input::GetInteger("What is the hero's age? ", 0, 100);
+    std::cout << "Age? " << age << "\n";
 
     /*
       Calling a method
