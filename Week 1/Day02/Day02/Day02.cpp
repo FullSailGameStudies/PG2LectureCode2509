@@ -2,7 +2,17 @@
 #include <string>
 #include <vector>
 
-bool postFix(std::string& hero)
+//RULE:
+// for parameters, 
+//      if it is a class, pass by reference
+//      if it is a container of other items, pass by reference
+//      want to grant a method access to a variable in a different scope
+// 
+//pass by reference:
+//  1) prevents a copy. copies are "expensive"
+//  2) gives access to a variable in a different scope
+//  3) effectively pass back multiple return values
+bool postFix(std::string& hero)//pass by REFERENCE (alias)
 {
     srand((unsigned int)time(NULL));
     int postFixNumber = rand() % 1000;
@@ -35,6 +45,21 @@ void printInfo(const std::vector<int>& scores)
 
 int main()
 {
+    //postFix("Batman");
+    std::string myHero = "Aquaman";
+    postFix(myHero);
+
+    int n = 5;
+    int n2 = n; //copy the value of n into n2. they are separate variables
+    n2++;
+    int& n3 = n;//giving n a new name, n3
+    n3 = n2;//copies the value of n2 to n3 (and n)
+    //int& n5 = 5;
+    n3--;
+    std::cout << n << "," << n2 << "\n";
+    std::cout << n << "," << n3 << "\n";
+
+
     /*
         ╔══════════════════════════════╗
         ║Parameters: Pass by Reference.║
