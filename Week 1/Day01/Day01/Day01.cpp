@@ -4,6 +4,7 @@
 #include "Calculator.h"
 #include "Console.h"
 #include "Input.h"
+#include "Menu.h"
 
 int AddOne(int localNumber)
 {
@@ -58,6 +59,18 @@ int main()
     int age = Input::GetInteger("What is the hero's age? ", 0, 100);
     std::cout << "Age? " << age << "\n";
 
+
+    Menu cafe;
+    cafe.SetName("Not Applebees");
+    std::string cafeName = cafe.GetName();
+    std::cout << "\n\n" << cafeName << "\n";
+    cafe.AddMenuItem("Fries");
+    cafe.AddMenuItem("hamburger");
+    cafe.AddMenuItem("Wings");
+    cafe.AddMenuItem("waffles");
+    cafe.AddMenuItem("French toast");
+    cafe.AddMenuItem("broccoli");
+    cafe.PrintMenu();
     /*
       Calling a method
         use the methods name.
