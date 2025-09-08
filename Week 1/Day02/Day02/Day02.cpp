@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include "FullSailCourse.h"
 
 //RULE:
 // for parameters, 
@@ -40,6 +41,14 @@ void print(const std::vector<int>& scores)
 
 void printInfo(const std::vector<int>& scores)
 {
+    //size() - # of items in the vector
+    //capacity() - length of the internal array
+    //size <= capacity
+    //in general, what happens when size == capacity and I push_back a new value?
+    //  it "resizes" the internal array and adds the new item
+    //      resize means 
+    //          1) creates a new bigger array 
+    //          2) copies the old array to the new array
     std::cout << "size: " << scores.size() << "\tcapacity: " << scores.capacity() << "\n";
 }
 
@@ -61,6 +70,7 @@ int main()
 
 
     /*
+
         ╔══════════════════════════════╗
         ║Parameters: Pass by Reference.║
         ╚══════════════════════════════╝
@@ -84,8 +94,14 @@ int main()
 
     */
     std::vector<float> grades;
+    FullSailCourse pg2;
+    pg2.SetName("PG2 2509");
+    pg2.GetGrades(grades);
+    pg2.PrintGrades(grades);
+    pg2.EraseGrades(grades);
+    pg2.PrintGrades(grades);
 
-
+    const float pi = 3.14F;
 
     /*
         ╔══════════════════╗
@@ -96,6 +112,8 @@ int main()
         This is the way you pass by reference and prevent the method from changing the variable.
     */
     std::vector<int> highScores;
+    highScores.reserve(10);
+    printInfo(highScores);//size: 0?  capacity: 0?
     for (int i = 0; i < 10; ++i)
     {
         highScores.push_back(rand() % 5000);
@@ -104,7 +122,14 @@ int main()
     float avg = average(highScores);
 
 
-
+    std::vector<int> scores2 = highScores;//copies the vector
+    std::vector<int> scores3(highScores);//copies the vector
+    std::vector<int> scores4;
+    scores4.reserve(highScores.size());
+    for (int i = 0; i < highScores.size(); i++)
+    {
+        scores4.push_back(highScores[i]);
+    }
     /*
         CHALLENGE 2:
 
