@@ -7,12 +7,47 @@
 #include <vector>
 #include "Console.h"
 #include "Input.h"
+#include <iomanip>//used to format with cout
 
 enum class Weapon
 {
     Sword, Axe, Spear, Mace
 };
 
+const int NOT_FOUND = -1;
+
+int LinearSearch(const std::vector<int>& nummies, int searchNumber)
+{
+    int result = NOT_FOUND;
+    for (int i = 0; i < nummies.size(); i++)
+    {
+        if (nummies[i] == searchNumber)
+        {
+            result = i;
+            break;
+        }
+    }
+    return result;
+}
+
+void PrintGrades(const std::map<std::string, double>& course)
+{
+    std::cout << "\n\nPG2 2509\n";
+    for (auto& [student,grade] : course)
+    {
+        std::cout << std::setw(15) << std::left << student << " ";
+        Console::SetForegroundColor(
+            //ternary operator
+            (grade < 59.5) ? ConsoleColor::Red :
+            (grade < 69.5) ? ConsoleColor::Yellow :
+            (grade < 79.5) ? ConsoleColor::Blue :
+            (grade < 89.5) ? ConsoleColor::Magenta :
+            ConsoleColor::Green
+        );
+        std::cout << std::setw(7) << std::right << grade << "\n";
+        Console::Reset();
+    }
+}
 
 int main()
 {
@@ -38,6 +73,15 @@ int main()
     */
     std::vector<int> numbers = { 0,1,2,3,4,5,6 };
     int searchNumber = 15;
+    int index = LinearSearch(numbers, searchNumber);
+    if (index == NOT_FOUND)
+    {
+        std::cout << searchNumber << " was not found.\n";
+    }
+    else
+    {
+        std::cout << searchNumber << " was found at index " << index << "\n";
+    }
 
 
 
@@ -85,6 +129,85 @@ int main()
 
     */
 
+
+    std::map<std::string, float> menu;
+
+    //add data to the map
+    //1) (easy way)  map[key] = value;
+    menu["potatoes"] = 0.65f;
+    menu["chicken parmesan"] = 12.99f;
+    menu["chicken alfredo"] = 11.99f;
+    menu["slice pizza"] = 4.99f;
+    menu["slice pizza"] = 8.99f;//overwrites the value
+
+    //2) (the "hard" way) map.insert(keyValuePair);
+    std::pair<std::string, float> pairToAdd =
+        std::make_pair("ice cream", 4.99f);
+    menu.insert(pairToAdd); 
+    pairToAdd = std::make_pair("ice cream", 6.99f);
+    auto wasInserted =  menu.insert(pairToAdd);//will NOT overwrite
+    //pair objects have 2 items: first, second
+    if (wasInserted.second)
+    {
+        std::cout << "item was inserted\n";
+    }
+    else
+    {
+        std::cout << "item was NOT inserted\n";
+    }
+
+    std::cout << "\n\nPG2 Cafe\n";
+    //looping over a map
+    //1) (easy way) foreach loop
+    for (auto& pair : menu)
+    {
+        //setw(number) - forces the next thing printed to fit into that number of spaces
+        //left - left align the next thing printed
+        //right - right align the next thing printed
+        std::cout << std::setw(18) << std::left << pair.first << " ";//the key
+        std::cout << std::setw(7) << std::right << pair.second << "\n";//the value
+    }
+
+    std::cout << "\n\nPG2 Cafe\n";
+    //foreach w/ structured binding
+    for (const auto& [itemName,itemPrice] : menu)
+    {
+        std::cout << itemName << " ";//the key
+        std::cout << itemPrice << "\n";//the value
+    }
+
+    std::cout << "\n\nPG2 Cafe\n";
+    //2) ("hard" way) iterator loop
+    //begin() - iterator to the first item
+    //end() - iterator to the item after the last item
+    //iterator++ - moves to the next item
+    for (auto it = menu.begin(); it != menu.end(); it++)
+    {
+        std::cout << it->first << " ";//the key
+        std::cout << it->second << "\n";//the value
+    }
+    std::cout << "\n\n";
+
+    std::string itemToFind = "chicken parmesan";
+    auto wasFound = menu.find(itemToFind);
+    if (wasFound == menu.end())
+        std::cout << itemToFind << " is not on the menu. Try McDonald's!\n";
+    else
+    {
+        std::cout << itemToFind << " used to costs " << wasFound->second << "\n";
+        //ways to update
+        //map[key] = newValue; overwrite the old value
+        //iterator->second = newValue;
+        //if you have the iterator, use the iterator. do NOT lookup the key again.
+        wasFound->second *= 1.1f;
+        std::cout << "Now it costs " << wasFound->second << "! Thanks Putin!!\n";
+    }
+    std::cout << "\n\n";
+
+    menu.erase("potatoes");//requires a lookup
+    wasFound = menu.find("chicken alfredo");
+    if (wasFound != menu.end())
+        menu.erase(wasFound);
 
 
 
@@ -190,4 +313,46 @@ int main()
             Pick any student and curve the grade (add 5) that is stored in the grades map
 
     */
+
+    std::vector<std::string> students = {
+        "Garrett", "Davyael", "Dai", "Kristoffer","Juno","Daniel","T.K.", "Deven", "Thomas", "Haru", "Christopher"
+    };
+    std::map<std::string, double> grades;
+    srand(time(NULL));
+    for (auto& student : students)
+    {
+        grades[student] = rand() % 10001 / 100.0;
+    }
+
+    do
+    {
+        PrintGrades(grades);
+        std::string studentToCurve = Input::GetString("Student to curve: ");
+        if (studentToCurve.empty()) break;
+
+        auto studentFound = grades.find(studentToCurve);
+        if (studentFound != grades.end())
+        {
+            studentFound->second = std::min<double>(100, studentFound->second + 5);
+            std::cout << "Grade curved to " << studentFound->second << "\n";
+        }
+        else
+            std::cout << studentToCurve << " is not in the course.\n";
+    } while (true);
+
+
+    do
+    {
+        PrintGrades(grades);
+        std::string studentToCurve = Input::GetString("Student to drop: ");
+        if (studentToCurve.empty()) break;
+
+        auto studentFound = grades.find(studentToCurve);
+        if (studentFound != grades.end())
+        {
+            grades.erase(studentFound);
+        }
+        else
+            std::cout << studentToCurve << " is not in the course.\n";
+    } while (true);
 }
