@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#include "Person.h"
+#include "Color.h"
+#include "Employee.h"
 
 
 /*              CLASSESS
@@ -44,6 +47,21 @@
 
 int main()
 {
+    Person steve("Steve Austin", 30, "6.5", 250, "--");//creating an instance (object) of the class
+    int age = steve.Age();//????
+    std::cout << age << "\n";
+    //steve.SSN = "123-45-6789";
+    //steve.SSN = "BLAH!";
+    //steve.SetName("Steve Austin");
+    //steve.Age(30);
+
+    Employee alfred("Alfred Pennyworth", 95, "Butler", 50);
+
+    Color redColor;
+    redColor.red = 255;
+    redColor.blue = 0;
+    redColor.green = 0;
+    redColor.alpha = 255;
     /*
         Lecture code: add a Car class
     
