@@ -10,6 +10,12 @@
 
 int main()
 {
+	Account a1;
+	a1.mBalance = 1000;
+	Account a2;
+	a2.mBalance = 500;
+
+	Account a3 = a1 + a2;
 	/*
 		╔═══════════════╗
 		║  Inheritance  ║

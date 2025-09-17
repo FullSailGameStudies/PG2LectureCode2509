@@ -5,6 +5,8 @@
 #include "Person.h"
 #include "Color.h"
 #include "Employee.h"
+#include "Manager.h"
+#include <vector>
 
 
 /*              CLASSESS
@@ -44,9 +46,67 @@
 
 */
 
+// Compile-Time Polymorphism:
+// Overloading:
+//  has to be different on the parameters
+//  return type is not enough
 
+void DoIt()
+{}
+int DoIt(int n)
+{
+    return 0;
+}
+int DoIt(int n1, int n2) { return 0; }
+float DoIt(float f1, float f2) { return 0; }
+
+void counter()
+{
+    static int i = 0;
+    std::cout << i << " ";
+    i++;
+}
 int main()
 {
+    for (size_t i = 0; i < 10; i++)
+    {
+        counter();
+    }
+    //Animal animal;
+    DoIt();
+    DoIt(5);
+    int n1 = 5, n2 = 6;
+    int sum = n1 + n2;
+
+    int num = 5;
+    int num2 = 7;
+    int* pNum;//pointer to an int
+    pNum = &num;//address-of num
+    pNum = &num2;//points pNum to num2
+    std::cout << pNum << "\n" << *pNum << "\n";
+
+    int& rNum = num;
+    rNum = num2;//copying num2 TO num
+
+    //
+    // MODERN C++ pointer: unique_ptr object
+    //   it manages the pointer for you
+    //   it is the ONLY variable that can point to the memory (unique)
+    // 
+    // "=new" means memory is allocated on the heap, not the stack
+    //EVERY "=new" requires a corresponding  "delete"!!
+    {
+        int* hNum = new int(10);
+        delete hNum;//deallocated the int
+
+        std::unique_ptr<Employee> uEmp = 
+            std::make_unique<Employee>("Alfred Pennyworth", 95, "Butler", 50);
+        //when it goes out of scope, it AUTOMATICALLY deletes the memory. no memory leak!!
+
+        //std::unique_ptr<Employee> uEmp2 = uEmp;
+    }//hNum is deallocated, but the int is still alive on the heap
+
+
     Person steve("Steve Austin", 30, "6.5", 250, "--");//creating an instance (object) of the class
     int age = steve.Age();//????
     std::cout << age << "\n";
@@ -54,8 +114,47 @@ int main()
     //steve.SSN = "BLAH!";
     //steve.SetName("Steve Austin");
     //steve.Age(30);
+    Person::Report();
 
     Employee alfred("Alfred Pennyworth", 95, "Butler", 50);
+    Manager bruce("Bruce Wayne", 35, "Butler", 30);
+    bruce.DoWork(18);
+    alfred.DoWork(20);
+    Employee* pEmp = &alfred;
+    std::cout << pEmp->GetName() << "\n";
+    pEmp->DoWork(20);
+    pEmp = &bruce;//UPCAST
+    //UPCAST: casting from a CHILD type to a PARENT type
+    //UPCAST is ALWAYS safe
+    Person* peep = &bruce;
+
+    //DOWNCAST: casting from a PARENT type to a CHILD type
+    //DOWNCAST is NOT safe
+
+    std::cout << "MEMORY LOCATIONS:\n"<< & bruce << "\n" << pEmp << "\n" << peep << "\n";
+    std::cout << pEmp->GetName() << "\n";
+    pEmp->DoWork(18);
+
+    Employee e1 = bruce;//COPIES the employee parts to e1
+
+    std::unique_ptr<Employee> uAlfred = std::make_unique<Employee>("Alfred Pennyworth", 95, "Butler", 50);
+    std::unique_ptr<Manager> uBruce = std::make_unique<Manager>("Bruce Wayne", 35, "Butler", 30);
+    std::vector<std::unique_ptr<Employee>> employees;
+    employees.push_back(std::move(uAlfred));
+    employees.push_back(std::move(uBruce));//copies the memory address to Bruce
+    //pointers will keep this from happening
+
+    for (auto& employee : employees)
+    {
+        employee->DoWork(rand() % 9);
+    }
+
+    int n5 = 6;
+    long l5 = n5;//implicit cast
+    n5 = (int)l5;//explicit cast
+
+
+
 
     Color redColor;
     redColor.red = 255;

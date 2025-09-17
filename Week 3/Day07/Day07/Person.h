@@ -1,17 +1,32 @@
 #pragma once
 #include <string>
+#include "Animal.h"
 
 //what the class can DO (methods)
 //	job, eat, sleep
 //what describes the class (data)
 //	height, weight, name, age, SSN
-class Person
+class Person : public Animal
 {
+	//shared variable for ALL Person objects
+	static int numberOfPeople;
+
+
+
 	//ACCESS modifiers: who has access to the class parts
 	//  you can have any number of these sections
 	//  they can be in any order
 	// 
 public: //ALL code can see it, use it, change it
+	void MakeSound() override;
+
+	//static methods:
+	//  they do NOT have a 'this' parameter
+	//	can ONLY access static members (static fields and static methods)
+	static void Report()
+	{
+		std::cout << numberOfPeople << " people in the world!\n";
+	}
 
 	//constructors (ctor): special methods to initialize our object
 	//  MUST be called to create an object of the class
@@ -36,7 +51,14 @@ public: //ALL code can see it, use it, change it
 	//		return type matches the type of the field
 	//		returns the field
 	std::string GetName() const { return name_; }
-	int Age() const { return age_; }
+	//Non-static methods:
+	//  there is a hidden parameter called 'this'
+	//	non-static methods can access BOTH non-static AND static members
+	int Age() const 
+	{ 
+		//"this" is a pointer to the current object
+		return this->age_; //how does this get the correct age for an object?
+	}
 
 	//setters (mutators)
 	//	general rules:
@@ -71,6 +93,8 @@ private: //(DEFAULT) ONLY* this class can see it, use it, etc
 	//		why? to have a visual difference between fields and other variables\
 	//			so you know the impact of changing a variable
 	//			parameters vs local variables vs fields
+	// 
+	//non-static means every instance of Person has their own set of these variables
 	std::string SSN_;
 	std::string height_;
 	float weight_;

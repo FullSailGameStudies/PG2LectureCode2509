@@ -1,4 +1,5 @@
 #include "Person.h"
+#include <iostream>
 
 //initialize the fields of the object using the parameters
 //preferred way: use the member initialization list
@@ -21,4 +22,8 @@ Person::Person(const std::string& name, int age, const std::string& height,
 	weight_(weight),
 	SSN_(SSN)
 {
+}
+void Person::MakeSound()
+{
+	std::cout << "Hello neighbor.";
 }
