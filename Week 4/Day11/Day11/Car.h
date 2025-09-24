@@ -19,6 +19,20 @@ public:
 	Car(int modelYear, std::string make, std::string model) :
 		mModelYear(modelYear), mMake(make), mModel(model)
 	{}
+	Car(const std::string& csvData, char delimiter)
+	{
+		DeserializeCSV(csvData, delimiter);
+	}
+
+	void SerializeCSV(std::ofstream& outFile, char delimiter) const;
+
+	//Deserializing...
+	//1) create a Deserialize method
+	//2) create a constructor that calls Deserialize
+
+	//parse the data from the string
+	//set the fields using the data
+	void DeserializeCSV(const std::string& csvData, char delimiter);
 
 	int ModelYear() const  //const says the method can't modify anything
 	{ 
